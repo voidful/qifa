@@ -1,24 +1,101 @@
-# flashattn-helper
+# ⚡ qifa – Quick Installer for Flash Attention
 
-A small command-line utility that **detects your Python, PyTorch, CUDA, and C++11 ABI**. It then picks the matching prebuilt `flash-attn` wheel from the official GitHub Releases and installs it.
+> One command to detect, select, and install the correct [flash-attn](https://github.com/Dao-AILab/flash-attention) wheel for your environment.
 
-- Detects: Python tag, PyTorch version and CUDA tag, C++11 ABI.
-- Filters matching wheels from Releases. Prefers `cxx11abiFALSE` by default.
-- One command install. Or use `--dry-run` to print the selected wheel URL.
+[![Python 3.8+](https://img.shields.io/badge/python-3.8+-blue.svg)](https://www.python.org/downloads/)
+[![License: BSD-3](https://img.shields.io/badge/license-BSD--3-green.svg)](LICENSE)
 
-> Note: Currently optimized for Linux x86_64 official wheels. Windows or ROCm will print guidance but will not auto-install.
+---
 
-## Installation
+## ✨ Features
+
+- **Auto-Detection** – Identifies Python version, PyTorch version, CUDA version, and C++11 ABI
+- **Smart Matching** – Finds the correct prebuilt wheel from official GitHub Releases
+- **Zero Config** – Just run `qifa install` and you're done
+- **Dry Run Mode** – Preview what will be installed before committing
+
+> **Note**: Currently optimized for **Linux x86_64** official wheels. Windows/ROCm users will receive guidance but may need manual installation.
+
+---
+
+## 📦 Installation
+
 ```bash
-pip install flashattn
+pip install qifa
 ```
 
-## Usage
+---
+
+## 🚀 Quick Start
+
 ```bash
-flashattn plan            # show environment and the wheel to be used
-flashattn install         # download and install
-flashattn install --version 2.5.8
-flashattn install --abi FALSE --dry-run
-flashattn uninstall       # remove existing flash-attn
-flashattn doctor          # quick compatibility checks
+# Check your environment and see which wheel will be installed
+qifa plan
+
+# Install the matching flash-attn wheel
+qifa install
 ```
+
+---
+
+## 📖 Commands
+
+| Command | Description |
+|---------|-------------|
+| `qifa plan` | Show detected environment and the wheel that will be installed |
+| `qifa install` | Download and install the matching wheel |
+| `qifa uninstall` | Remove existing flash-attn installation |
+| `qifa doctor` | Run compatibility checks and get guidance |
+
+### Options
+
+```bash
+# Install a specific version
+qifa install --version 2.5.8
+
+# Force a specific C++11 ABI setting
+qifa install --abi FALSE
+
+# Preview without installing
+qifa install --dry-run
+```
+
+---
+
+## 🔍 Example Output
+
+```bash
+$ qifa plan
+```
+
+```json
+{
+  "python_tag": "cp310",
+  "torch_mm": "2.1",
+  "torch_cuda": "cu121",
+  "chosen_cu_tag": "cu121",
+  "abi_FALSE": true,
+  "platform": "linux_x86_64",
+  "version": "2.5.8",
+  "found_asset": "flash_attn-2.5.8+cu121torch2.1cxx11abiFALSE-cp310-cp310-linux_x86_64.whl",
+  "download_url": "https://github.com/Dao-AILab/flash-attention/releases/download/..."
+}
+```
+
+---
+
+## 🛠️ Troubleshooting
+
+| Issue | Solution |
+|-------|----------|
+| **No matching wheel found** | Try `--version` to specify a different version, or `--abi TRUE` |
+| **PyTorch not detected** | Install CUDA-enabled PyTorch first: `pip install torch --index-url https://download.pytorch.org/whl/cu121` |
+| **Platform not supported** | Official wheels are for Linux x86_64; other platforms require building from source |
+
+Run `qifa doctor` for detailed guidance on your specific environment.
+
+---
+
+## 📄 License
+
+BSD-3-Clause © [Voidful](https://github.com/voidful)
